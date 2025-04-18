@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Republic</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+            </a>
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('sobre') }}">Sobre</a>
+            <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+            <a href="{{ url_for('cadastro') }}">Login</a>
+        </nav>
+    </header>
+
+    <section class="bloco">
+
+        <section class="about">
+            <div class="container">
+                <h2>Sobre a Republic</h2>
+                <p>
+                    A Republic nasceu com a missão de transformar a experiência de estudantes universitários que
+                    precisam
+                    encontrar um lar longe de casa. Sabemos que iniciar a vida acadêmica já traz consigo uma série de
+                    desafios
+                    — novos ambientes, novas responsabilidades e, muitas vezes, a distância da família. Em meio a tantas
+                    mudanças,
+                    buscar um lugar confortável, seguro e acessível para morar não deveria ser mais uma preocupação.
+                </p>
+                <p>
+                    Pensando nisso, criamos uma plataforma que tem como propósito principal facilitar essa jornada.
+                    Nosso objetivo é conectar estudantes a imóveis localizados próximos às universidades, com preços que
+                    cabem no orçamento e, acima de tudo, com o mínimo de burocracia possível. Queremos tornar esse
+                    processo
+                    mais humano, mais leve e mais seguro, entendendo as reais necessidades de quem está começando uma
+                    nova etapa da vida.
+                </p>
+                <p>
+                    Na Republic, acreditamos que a moradia é muito mais do que um simples teto:
+                    é onde o estudante descansa depois de um dia cheio, onde estuda para as provas,
+                    onde cria laços e histórias com novas amizades. Por isso, nosso compromisso é oferecer
+                    uma solução completa, que não apenas agilize a busca por um imóvel, mas que também ofereça
+                    tranquilidade e confiança em cada etapa do caminho.
+
+                    Estamos aqui para apoiar cada estudante nessa fase tão importante, ajudando a transformar a casa
+                    provisória
+                    em um verdadeiro lar — um lugar para crescer, aprender e viver
+                    intensamente todos os momentos da vida universitária.
+                </p>
+            </div>
+        </section>
+
+
+
+        <section class="team">
+            <div class="container">
+                <h2>Nossa equipe</h2>
+                <div class="team-members">
+                    <div class="member">
+                        <img src="{{ url_for('static', filename='img/equipe/fco.jpeg') }}" alt="Equipe" class="img-funcionarios">
+                        <p>Francisco Neto<br><small>Desenvolvedor</small></p>
+                    </div>
+                    <div class="member">
+                        <img src="{{ url_for('static', filename='img/equipe/gab.jpeg') }}" alt="Equipe" class="img-funcionarios">
+                        <p>Gabriel Oliveira<br><small>Desenvolvedor</small></p>
+                    </div>
+                    <div class="member">
+                        <img src="{{ url_for('static', filename='img/equipe/funcionario.jpeg') }}" alt="Equipe" class="img-funcionarios">
+                        <p>Luis Felipe<br><small>Desenvolvedor</small></p>
+                    </div>
+                    <div class="member">
+                        <img src="{{ url_for('static', filename='img/equipe/serejo.png') }}" alt="Equipe" class="img-funcionarios">
+                        <p>Willamy Josué<br><small>Desenvolvedor</small></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        <p>Avenida Monsenhor Antonio Sampaio, 2365 - Dirceu Arcoverde, Parnaíba - PI, 64241-145</p>
+                    </div>
+                    <div class="col">
+                        <div class="socials">
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/facebook.png') }}" alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/ig.png') }}" alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/x.webp') }}" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('termos') }}">Termos de serviço</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

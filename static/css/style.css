@@ -1,0 +1,217 @@
+/* ===== style.css (/_css/style.css) ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c6c1bd;
+    color: #333;
+}
+
+.header {
+    background: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.logo img {
+    width: 120px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+.hero {
+    background: url('/static/img/background.jpg') center/cover no-repeat;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    
+}
+
+.btn-hero {
+    background-color: rgba(255, 255, 255, 0.589);
+    color: black;
+    padding: 20px 40px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+
+}
+
+.hero-content{
+    margin-top: 15%;
+}
+
+
+.btn-hero:hover {
+    background-color: rgb(255, 255, 255);
+    color: black;
+}
+
+.gallery {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding-top: 25%;
+}
+
+.gallery img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid white;
+    margin-top: 5%;
+}
+
+/* --------------- INICIO PÁGINA DE SOBRE ------------- */
+
+.bloco{
+    background-color: white;
+    margin: 50px;
+    border-radius: 20px;
+}
+
+
+.container{
+    padding: 30px 50px;
+}
+
+.container p{
+    text-align: justify;
+    line-height: 30px;
+    margin-top: 15px;
+}
+
+.container h2{
+    margin-bottom: 10px;
+
+}
+
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.member {
+    text-align: center;
+    max-width: 200px;
+    margin-top: 30px;
+}
+
+.member img{
+    width: 100%;
+    max-width: 150px;
+    max-width: 150px;
+    border-radius: 20%;
+    margin-bottom: 10px;
+}
+
+
+.member p {
+    font-weight: bold;
+    text-align: center;
+}
+
+.member small {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+/* --------------- FIM PÁGINA DE SOBRE ------------- */
+
+.features {
+    margin-top: 5%;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.features h2 {
+    margin-bottom: 40px;
+    font-size: 24px;
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.849);
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+    height: 250px;
+}
+
+.card img {
+    width: 50px;
+    height: 50px;
+    margin-top: 25%;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.footer {
+    background-color: black;
+    color: white;
+    padding: 30px 0;
+    font-size: 14px;
+}
+
+.footer-content .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-content .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.footer-content .col {
+    flex: 1;
+    padding: 10px;
+}
+
+.footer-content .socials a img {
+    width: 30px;
+    margin: 0 8px;
+    vertical-align: middle;
+}
+
+.footer-content a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}

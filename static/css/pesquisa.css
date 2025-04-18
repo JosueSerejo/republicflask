@@ -1,0 +1,113 @@
+/* ===== pesquisa.css (/_css/pesquisa.css) ===== */
+
+/* Override para não herdar width/height fixos de .card do style.css */
+
+.search-bar {
+  margin: 20px;
+  text-align: center;
+}
+
+.search-bar input {
+  padding: 10px;
+  width: 50%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+main {
+  display: flex;
+}
+
+.filters {
+  width: 15%;
+  padding: 20px;
+  background: #f0f0f0;
+  margin: 20px;
+  border-radius: 20px;
+}
+
+.filters h3{
+  margin-top: 10px;
+}
+
+.filters h4{
+  margin-top: 20px;
+}
+.cards {
+  width: 80%;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.cards .card {
+  width: 350px;
+  height: 300px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 0;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between; /* Espaço entre o preço e o botão */
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+  padding: 20px;
+}
+
+.preco {
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: left; /* Alinha o preço à esquerda */
+  flex: 1; /* Faz com que o preço ocupe o máximo de espaço disponível */
+}
+
+.botao {
+  text-align: right; /* Alinha o botão à direita */
+}
+
+.botao a {
+  background-color: black; /* Cor de fundo preta */
+  color: white;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.botao a:hover {
+  background-color: #333; /* Cor do fundo ao passar o mouse */
+}
+
+
+footer {
+  background: black;
+  color: white;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.footer-columns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-columns div {
+  text-align: center;
+}

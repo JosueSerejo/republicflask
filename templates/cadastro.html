@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Republic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+    
+</head>
+
+<body>
+
+
+    <header class="header">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+            </a>
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('sobre') }}">Sobre</a>
+            <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+            <a href="{{ url_for('cadastro') }}">Login</a>
+        </nav>
+    </header>
+    
+
+
+
+
+    <!-- Seção de Login/Cadastro -->
+    <section class="auth-section">
+        <div class="auth-overlay">
+            <div class="auth-container">
+                <div class="auth-column login-column">
+                    <h2>Entrar na Republic</h2>
+                    <form class="auth-form" action="/login" method="post">
+                        <input type="email" name="email" placeholder="E-mail" required />
+                        <input type="password" name="senha" placeholder="Senha" required />
+                        <button type="submit">Entrar</button>
+                    </form>
+                    <div class="login">
+                        {% if mensagem_login %}
+                        <p style="color: red;">{{ mensagem_login }}</p>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div class="auth-column cadastro-column">
+                    <h2>Criar Conta</h2>
+                    <form class="auth-form" action="/cadastro" method="post">
+                        <input type="text" name="nome" placeholder="Nome completo" required />
+                        <input type="email" name="email" placeholder="E-mail" required />
+                        <input type="password" name="senha" placeholder="Senha" required />
+                        <input type="text" name="celular" placeholder="Número de celular" required />
+
+                        <div class="cadastro-footer">
+                            <label class="termos">
+                                <input type="checkbox" name="termos" required />
+                                Concordo com os <a href="#">termos e condições</a>
+                            </label>
+                            <button type="submit">Criar conta</button>
+                        </div>
+                    </form>
+                    <div class="cadastro">
+                        {% if mensagem %}
+                        {% if 'sucesso' in mensagem %}
+                            <p style="color: green;">{{ mensagem }}</p>
+                        {% else %}
+                            <p style="color: red;">{{ mensagem }}</p>
+                        {% endif %}
+                    {% endif %}
+                    </div>
+                </div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        <p>Avenida Monsenhor Antonio Sampaio, 2365 - Dirceu Arcoverde, Parnaíba - PI, 64241-145</p>
+                    </div>
+                    <div class="col">
+                        <div class="socials">
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/facebook.png') }}" alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/ig.png') }}" alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/x.webp') }}" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('termos') }}">Termos de serviço</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
