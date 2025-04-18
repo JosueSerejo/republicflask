@@ -27,7 +27,8 @@ def pesquisa():
 # Página de Cadastro/Login (cadastro.html)
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
-    mensagem = None  # Variável para guardar a mensagem a ser exibida
+    mensagem_cadastro = None
+    mensagem_login = None
 
     if request.method == 'POST':
         nome = request.form['nome']
@@ -35,31 +36,27 @@ def cadastro():
         senha = request.form['senha']
         celular = request.form['celular']
 
-        # Conectar ao banco
-        conn = sqlite3.connect('instance/banco.db')
-        cursor = conn.cursor()
-
-        # Verificar se o email já está cadastrado
-        cursor.execute('SELECT * FROM usuarios WHERE email = ?', (email,))
-        usuario = cursor.fetchone()
-
-        if usuario:
-            mensagem = 'Este usuário já está cadastrado!'
-        else:
+        try:
+            conn = sqlite3.connect('instance/banco.db')
+            cursor = conn.cursor()
             cursor.execute('INSERT INTO usuarios (nome, email, senha, celular) VALUES (?, ?, ?, ?)',
-                           (nome, email, senha, celular))
+                        (nome, email, senha, celular))
             conn.commit()
-            mensagem = 'Cadastro realizado com sucesso!'
+            conn.close()
 
-        conn.close()
+            mensagem_cadastro = 'Cadastro realizado com sucesso!'
+        except sqlite3.IntegrityError:
+            mensagem_cadastro = 'Email já cadastrado.'
 
-    return render_template('cadastro.html', mensagem=mensagem)
+    return render_template('cadastro.html', mensagem_cadastro=mensagem_cadastro, mensagem_login=mensagem_login)
+
 
 
 # Página de Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    mensagem_login = None  # Variável para armazenar a mensagem de erro ou sucesso do login
+    mensagem_login = None
+    mensagem_cadastro = None
 
     if request.method == 'POST':
         email = request.form['email']
@@ -75,9 +72,10 @@ def login():
             session['usuario_id'] = usuario[0]
             return redirect(url_for('semlogin'))
         else:
-            mensagem_login = 'Email ou senha inválidos!'  # Exibe a mensagem de erro somente no login
+            mensagem_login = 'Email ou senha inválidos!'
 
-    return render_template('cadastro.html', mensagem_login=mensagem_login)
+    return render_template('cadastro.html', mensagem_login=mensagem_login, mensagem_cadastro=mensagem_cadastro)
+
 
 
 
