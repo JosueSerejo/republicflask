@@ -19,7 +19,16 @@
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('sobre') }}">Sobre</a>
             <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
-            <a href="{{ url_for('cadastro') }}">Login</a>
+        
+            {% if usuario_nome %}
+                <div class="user-info">
+                    <div class="separator">|</div>
+                    <span class="saudacao">Olá, {{ usuario_nome }}!</span>
+                    <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+            {% endif %}
         </nav>
     </header>
 

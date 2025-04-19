@@ -11,6 +11,44 @@ body {
     color: #333;
 }
 
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.separator {
+    color: white;
+    font-weight: bold;
+}
+
+.saudacao {
+    color: white;
+    border-bottom: 1px solid white;
+    padding-bottom: 2px;
+}
+
+.logout-btn {
+    background-color: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: darkred;
+}
+
+
 .header {
     background: rgb(0, 0, 0);
     display: flex;

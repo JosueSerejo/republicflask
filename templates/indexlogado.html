@@ -4,33 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logado.css') }}">
     <title>Republic</title>
 </head>
 
 <body>
-    <header class="header">
+<header class="header">
         <div class="logo">
             <a href="{{ url_for('index') }}">
                 <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
             </a>
         </div>
+
         <nav class="nav">
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('sobre') }}">Sobre</a>
             <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
-        
+
             {% if usuario_nome %}
-                <div class="user-info">
-                    <div class="separator">|</div>
-                    <span class="saudacao">Olá, {{ usuario_nome }}!</span>
-                    <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
-                </div>
-            {% else %}
-                <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+            <div class="user-info">
+                <p class="usuario-logado">Olá, {{ usuario_nome }}!</p>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
             {% endif %}
         </nav>
     </header>
+</body>
 
     <section class="hero">
         <div class="hero-content">

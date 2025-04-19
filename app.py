@@ -4,25 +4,45 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
 
-# Página inicial (index.html)
+# Função para obter o nome do usuário logado
+def obter_usuario_nome():
+    if 'usuario_id' in session:
+        conn = sqlite3.connect('instance/banco.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT nome FROM usuarios WHERE id = ?', (session['usuario_id'],))
+        usuario = cursor.fetchone()
+        conn.close()
+        if usuario:
+            return usuario[0]
+    return None
+
+# Página principal
 @app.route('/')
 def index():
-    return render_template('index.html')
+    usuario_nome = obter_usuario_nome()
+    return render_template('index.html', usuario_nome=usuario_nome)
 
-# Página de Sobre
 @app.route('/sobre')
 def sobre():
-    return render_template('sobre.html')
+    usuario_nome = obter_usuario_nome()
+    return render_template('sobre.html', usuario_nome=usuario_nome)
 
-# Página de Termos
-@app.route('/sobtermosre')
-def termos():
-    return render_template('termos.html')
-
-# Página de Pesquisa
 @app.route('/pesquisa')
 def pesquisa():
-    return render_template('pesquisa.html')
+    usuario_nome = obter_usuario_nome()
+    return render_template('pesquisa.html', usuario_nome=usuario_nome)
+
+@app.route('/apt')
+def apt():
+    usuario_nome = obter_usuario_nome()
+    return render_template('apt.html', usuario_nome=usuario_nome)
+
+@app.route('/termos')
+def termos():
+    usuario_nome = obter_usuario_nome()
+    return render_template('termos.html', usuario_nome=usuario_nome)
+
+
 
 # Página de Cadastro/Login (cadastro.html)
 @app.route('/cadastro', methods=['GET', 'POST'])
@@ -50,8 +70,6 @@ def cadastro():
 
     return render_template('cadastro.html', mensagem_cadastro=mensagem_cadastro, mensagem_login=mensagem_login)
 
-
-
 # Página de Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -69,46 +87,26 @@ def login():
         conn.close()
 
         if usuario:
-            session['usuario_id'] = usuario[0]
-            return redirect(url_for('semlogin'))
+            session['usuario_id'] = usuario[0]  # Armazena o ID do usuário na sessão
+            return redirect(url_for('index'))
         else:
             mensagem_login = 'Email ou senha inválidos!'
 
     return render_template('cadastro.html', mensagem_login=mensagem_login, mensagem_cadastro=mensagem_cadastro)
 
-
-
-
-    
-    # Se o método for GET, renderiza a página de login
-    return render_template('login.html')
-
-
 # Página protegida (só pra logados)
-@app.route('/semlogin')
-def semlogin():
+@app.route('/index')
+def home():
     if 'usuario_id' not in session:
         return redirect(url_for('cadastro'))
 
-    # Recuperar o nome do usuário a partir do banco de dados
-    usuario_id = session['usuario_id']
-    conn = sqlite3.connect('instance/banco.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT nome FROM usuarios WHERE id = ?', (usuario_id,))
-    usuario = cursor.fetchone()
-    conn.close()
-
-    if usuario:
-        usuario_nome = usuario[0]  # Nome do usuário
-        return render_template('semlogin.html', usuario_nome=usuario_nome)
-
-    return redirect(url_for('cadastro'))  # Caso o usuário não seja encontrado
-
+    usuario_nome = obter_usuario_nome()  # Recupera o nome do usuário
+    return render_template('index.html', usuario_nome=usuario_nome)
 
 # Logout
 @app.route('/logout')
 def logout():
-    session.pop('usuario_id', None)
+    session.pop('usuario_id', None)  # Remove o ID do usuário da sessão
     return redirect(url_for('cadastro'))
 
 if __name__ == '__main__':
