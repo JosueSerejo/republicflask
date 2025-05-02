@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Republic</title>
-  <link rel="stylesheet" href="/_css/style.css">
-  <link rel="stylesheet" href="/_css/map.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 
@@ -98,7 +98,7 @@
     </div>
   </footer>
 
-  <script src="/_js/map.js"></script>
+  <script src="{{ url_for('static', filename='js/map.js') }}"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </body>
 
