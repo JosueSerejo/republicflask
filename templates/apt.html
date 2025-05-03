@@ -5,37 +5,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Republic</title>
-  <link rel="stylesheet" href="/_css/style.css">
-  <link rel="stylesheet" href="/_css/map.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/apt.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
   <header class="header">
-
     <div class="logo">
-      <a href="index.html"><img src="/_img/logo/logo_branca.png" alt="Republic Logo"></a>
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+      </a>
     </div>
     <nav class="nav">
-      <a href="/index.html">Home</a>
-      <a href="/sobre.html">Sobre</a>
-      <a href="/pesquisa.html">Encontrar imóvel</a>
-      <a href="/cadastro.html">Login</a>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('sobre') }}">Sobre</a>
+      <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+
+      {% if usuario_nome %}
+      <div class="user-info">
+        <div class="separator">|</div>
+        <span class="saudacao">Olá, {{ usuario_nome }}!</span>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+      </div>
+      {% else %}
+      <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+      {% endif %}
     </nav>
   </header>
 
   <main class="main-content">
-    <div class="image-gallery">
+    <div class="image-gallery side-by-side">
       <div class="main-img">
-        <img src="/_img/apts/1.jpg" alt="Imagem principal">
+        <img id="current-img" src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem principal">
       </div>
       <div class="thumbs">
-        <img src="/_img/apts/2.jpg" alt="Imagem 2">
-        <img src="/_img/3.jpg" alt="Imagem 3">
-        <img src="/_img/4.jpg" alt="Imagem 4">
-        <img src="/_img/4.jpg" alt="Imagem 5">
-        <img src="/_img/5.jpeg" alt="Imagem 6">
-        <button>mostrar todas</button>
+        <img src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem 1">
+        <img src="{{ url_for('static', filename='img/apts/2.jpg') }}" alt="Imagem 2">
+        <img src="{{ url_for('static', filename='img/apts/3.jpg') }}" alt="Imagem 3">
+        <img src="{{ url_for('static', filename='img/apts/2.webp') }}" alt="Imagem 4">
+        <img src="{{ url_for('static', filename='img/apts/5.jpg') }}" alt="Imagem 5">
       </div>
     </div>
 
@@ -55,19 +66,21 @@
         <span>Wi-Fi rápido</span>
       </div>
 
+      <section class="description">
+        <h3>Descrição</h3>
+        <p>Desfrute do conforto e da praticidade neste aconchegante imóvel localizado em um condomínio residencial
+          seguro
+          em Parnaíba, Piauí. Ideal para famílias, casais ou viajantes a negócios. O espaço conta com 2 quartos
+          climatizados, cozinha completa, sala de estar com TV e Wi-Fi. Fácil acesso ao centro da cidade, praias e
+          pontos
+          turísticos. Estacionamento gratuito incluído. Reserve agora e experimente o melhor de Parnaíba!</p>
+      </section>
+
       <div class="price-action">
         <span class="price">R$ 200,00 / noite</span>
         <button>Reservar estadia</button>
         <button>Enviar mensagem</button>
       </div>
-    </section>
-
-    <section class="description">
-      <h3>Descrição</h3>
-      <p>Desfrute do conforto e da praticidade neste aconchegante imóvel localizado em um condomínio residencial seguro
-        em Parnaíba, Piauí. Ideal para famílias, casais ou viajantes a negócios. O espaço conta com 2 quartos
-        climatizados, cozinha completa, sala de estar com TV e Wi-Fi. Fácil acesso ao centro da cidade, praias e pontos
-        turísticos. Estacionamento gratuito incluído. Reserve agora e experimente o melhor de Parnaíba!</p>
     </section>
 
     <section class="map">
@@ -85,21 +98,21 @@
           </div>
           <div class="col">
             <div class="socials">
-              <a href="#"><img src="/_img/socials/facebook.png" alt="Facebook"></a>
-              <a href="#"><img src="/_img/socials/ig.png" alt="Instagram"></a>
-              <a href="#"><img src="/_img/socials/x.webp" alt="X"></a>
+              <a href="#"><img src="{{ url_for('static', filename='img/socials/facebook.png') }}" alt="Facebook"></a>
+              <a href="#"><img src="{{ url_for('static', filename='img/socials/ig.png') }}" alt="Instagram"></a>
+              <a href="#"><img src="{{ url_for('static', filename='img/socials/x.webp') }}" alt="X"></a>
             </div>
           </div>
           <div class="col">
-            <a href="termos.html">Termos de serviço</a>
+            <a href="{{ url_for('termos') }}">Termos de serviço</a>
           </div>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="/_js/map.js"></script>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
 </body>
 
 </html>
