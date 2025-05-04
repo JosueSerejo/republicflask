@@ -39,45 +39,43 @@
   <main class="main-content">
     <div class="image-gallery side-by-side">
       <div class="main-img">
-        <img id="current-img" src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem principal">
+        <!-- Exibe a imagem principal do apartamento -->
+        {% if apartamento.imagens and apartamento.imagens|length > 0 %}
+          <img id="current-img" src="{{ url_for('static', filename='img/apts/' + apartamento.imagens[0]) }}" alt="Imagem principal">
+        {% else %}
+          <img id="current-img" src="{{ url_for('static', filename='img/apts/default.jpg') }}" alt="Imagem padrão">
+        {% endif %}
       </div>
       <div class="thumbs">
-        <img src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem 1">
-        <img src="{{ url_for('static', filename='img/apts/2.jpg') }}" alt="Imagem 2">
-        <img src="{{ url_for('static', filename='img/apts/3.jpg') }}" alt="Imagem 3">
-        <img src="{{ url_for('static', filename='img/apts/2.webp') }}" alt="Imagem 4">
-        <img src="{{ url_for('static', filename='img/apts/5.jpg') }}" alt="Imagem 5">
+        <!-- Exibe as miniaturas das imagens -->
+        {% for img in apartamento.imagens %}
+          <img class="thumb" src="{{ url_for('static', filename='img/apts/' + img) }}" alt="Imagem" onclick="changeImage('{{ img }}')">
+        {% endfor %}
       </div>
     </div>
 
     <section class="details">
-      <h2>Espaço inteiro: condomínio em Parnaíba, Piauí</h2>
+      <h2>{{ apartamento.tipo }}: {{ apartamento.endereco }}, {{ apartamento.bairro }} - {{ apartamento.numero }}</h2>
       <ul class="info">
-        <li>2 quartos</li>
-        <li>2 banheiros</li>
-        <li>3 camas</li>
-        <li>4 hóspedes</li>
+        <li>{{ apartamento.quartos }} quartos</li>
+        <li>{{ apartamento.banheiros }} banheiros</li>
+        <li>{{ apartamento.outros }}</li>
       </ul>
 
       <div class="highlights">
-        <span>Estacionamento gratuito</span>
-        <span>Ar-condicionado</span>
-        <span>Cozinha equipada</span>
-        <span>Wi-Fi rápido</span>
+        <!-- Exibe os destaques do imóvel -->
+        {% for item in apartamento.inclusos %}
+        <span>{{ item }}</span>
+        {% endfor %}
       </div>
 
       <section class="description">
         <h3>Descrição</h3>
-        <p>Desfrute do conforto e da praticidade neste aconchegante imóvel localizado em um condomínio residencial
-          seguro
-          em Parnaíba, Piauí. Ideal para famílias, casais ou viajantes a negócios. O espaço conta com 2 quartos
-          climatizados, cozinha completa, sala de estar com TV e Wi-Fi. Fácil acesso ao centro da cidade, praias e
-          pontos
-          turísticos. Estacionamento gratuito incluído. Reserve agora e experimente o melhor de Parnaíba!</p>
+        <p>{{ apartamento.descricao }}</p>
       </section>
 
       <div class="price-action">
-        <span class="price">R$ 200,00 / noite</span>
+        <span class="price">R$ {{ apartamento.valor }} / noite</span>
         <button>Reservar estadia</button>
         <button>Enviar mensagem</button>
       </div>
@@ -111,12 +109,16 @@
     </div>
   </footer>
 
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   <script src="{{ url_for('static', filename='js/map.js') }}"></script>
-<<<<<<< HEAD
   <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
-=======
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
->>>>>>> a3e9d0d03d0b1b2163ed23cd05370f7442074947
+
+  <script>
+    function changeImage(image) {
+      document.getElementById('current-img').src = "{{ url_for('static', filename='img/apts/') }}" + image;
+    }
+  </script>
+
 </body>
 
 </html>

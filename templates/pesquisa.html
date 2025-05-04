@@ -66,84 +66,27 @@
         </aside>
 
         <section class="cards" id="cardContainer">
-            <div class="card" data-tipo="apartamento" data-quartos="1" data-valor="400" data-extras="agua,internet"
-                data-endereco="Rua A">
-                <img src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem">
-                <h3>Apartamento</h3>
-                <p>1 quarto</p>
+            {% for apt in apartamentos %}
+            <div class="card"
+                data-tipo="{{ apt.tipo }}"
+                data-quartos="{{ apt.quartos }}"
+                data-valor="{{ apt.valor }}"
+                data-extras="{{ apt.inclusos|join(',') }}"
+                data-endereco="{{ apt.endereco }}">
+                
+                <img src="{{ url_for('static', filename='img/apts/' ~ (apt.imagem or 'default.jpg')) }}" alt="Imagem">
+                <h3>{{ apt.tipo|capitalize }}</h3>
+                <p>{{ apt.quartos }} quarto{{ 's' if apt.quartos > 1 }}</p>
+        
                 <div class="card-footer">
-                    <p class="preco">R$ 400,00</p>
+                    <p class="preco">R$ {{ "%.2f"|format(apt.valor|float) }}</p>
                     <div class="botao">
-                        <a href="{{ url_for('apt') }}">Saiba mais</a>
+                        <a href="{{ url_for('detalhes_apartamento', id=apt.id) }}">Saiba mais</a>
                     </div>
                 </div>
             </div>
-
-            <div class="card" data-tipo="kitnet" data-quartos="1" data-valor="600" data-extras="energia"
-                data-endereco="Rua B">
-                <img src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem">
-                <h3>Kitnet</h3>
-                <p>1 quarto</p>
-                <div class="card-footer">
-                    <p class="preco">R$ 600,00</p>
-                    <div class="botao">
-                        <a href="#">Saiba mais</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" data-tipo="casa" data-quartos="3" data-valor="1200" data-extras="agua,energia,internet"
-                data-endereco="Rua C">
-                <img src="{{ url_for('static', filename='img/apts/3.avif') }}" alt="Imagem">
-                <h3>Casa</h3>
-                <p>3 quartos</p>
-                <div class="card-footer">
-                    <p class="preco">R$ 1200,00</p>
-                    <div class="botao">
-                        <a href="#">Saiba mais</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" data-tipo="apartamento" data-quartos="2" data-valor="900" data-extras="internet"
-                data-endereco="Rua D">
-                <img src="{{ url_for('static', filename='img/apts/1.jpg') }}" alt="Imagem">
-                <h3>Apartamento</h3>
-                <p>2 quartos</p>
-                <div class="card-footer">
-                    <p class="preco">R$ 900,00</p>
-                    <div class="botao">
-                        <a href="#">Saiba mais</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" data-tipo="kitnet" data-quartos="1" data-valor="500" data-extras="agua"
-                data-endereco="Rua E">
-                <img src="{{ url_for('static', filename='img/apts/4.jpg') }}" alt="Imagem">
-                <h3>Kitnet</h3>
-                <p>1 quarto</p>
-                <div class="card-footer">
-                    <p class="preco">R$ 500,00</p>
-                    <div class="botao">
-                        <a href="#">Saiba mais</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" data-tipo="casa" data-quartos="2" data-valor="1100" data-extras="energia"
-                data-endereco="Rua F">
-                <img src="{{ url_for('static', filename='img/apts/2.jpg') }}" alt="Imagem">
-                <h3>Casa</h3>
-                <p>2 quartos</p>
-                <div class="card-footer">
-                    <p class="preco">R$ 1100,00</p>
-                    <div class="botao">
-                        <a href="#">Saiba mais</a>
-                    </div>
-                </div>
-            </div>
-        </section>
+            {% endfor %}
+        </section>        
     </main>
 
 

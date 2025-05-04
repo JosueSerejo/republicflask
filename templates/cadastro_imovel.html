@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Imóvel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_imovel.css') }}">
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='img/logo/logo_branca.png') }}" alt="Republic Logo">
+            </a>
+        </div>
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('sobre') }}">Sobre</a>
+            <a href="{{ url_for('pesquisa') }}">Encontrar imóvel</a>
+
+            {% if usuario_nome %}
+            <div class="user-info">
+                <div class="separator">|</div>
+                <span class="saudacao">Olá, {{ usuario_nome }}!</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Sair</a>
+            </div>
+            {% else %}
+            <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="container_imovel">
+        <h1>INFORMAÇÕES DO IMÓVEL</h1>
+        <form class="form-container" method="POST" action="{{ url_for('cadastro_imovel') }}" enctype="multipart/form-data">
+            <div class="form-left">
+                <label>Endereço</label>
+                <input type="text" name="endereco" required />
+
+                <label>Bairro</label>
+                <input type="text" name="bairro" required />
+
+                <label>Número</label>
+                <input type="text" name="numero" required />
+
+                <label>CEP</label>
+                <input type="text" name="cep" placeholder="Ex: 64200-000" required />
+
+                <label>Complemento</label>
+                <input type="text" name="complemento" required />
+
+                <label>Adicionar fotos:</label>
+                <div class="upload-foto">
+                    <input type="file" name="fotos" id="foto-input" style="display:none" multiple onchange="previewImages(event)">
+                    <label for="foto-input" class="btn-upload">+</label>
+                </div>
+
+                <div id="image-preview-container"></div>
+
+                <label>Valor (mês)</label>
+                <div class="input-valor">
+                    <span class="prefixo">R$</span>
+                    <input type="text" name="valor" placeholder="0,00" required />
+                </div>
+            </div>
+
+            <div class="form-right">
+                <div class="box">
+                    <label>Quantidade de quartos</label>
+                    <input type="number" name="quartos" min="0" placeholder="Ex: 3" required />
+
+                    <label>Quantidade de banheiros</label>
+                    <input type="number" name="banheiros" min="0" placeholder="Ex: 2" required />
+
+                    <label>Inclusos:</label>
+                    <label><input type="checkbox" name="inclusos" value="agua"> Água</label>
+                    <label><input type="checkbox" name="inclusos" value="luz"> Luz</label>
+                    <label><input type="checkbox" name="inclusos" value="internet"> Internet</label>
+                    <label><input type="checkbox" name="inclusos" value="mobília"> Mobiliado</label>
+                    <label><input type="checkbox" name="inclusos" value="gás"> Gás</label>
+                    <label><input type="checkbox" name="inclusos" value="garagem"> Garagem</label>
+
+                    <label for="outros">Outros:</label>
+                    <input type="text" id="outros" name="outros" placeholder="Ex: Piscina, Faxina..." />
+                </div>
+
+                <div class="descricao">
+                    <label><strong>Descrição do imóvel</strong></label>
+                    <textarea name="descricao" required></textarea>
+                </div>
+            </div>
+
+            <!-- Botão de envio do formulário -->
+            <button type="submit">Cadastrar Imóvel</button>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        <p>Avenida Monsenhor Antonio Sampaio, 2365 - Dirceu Arcoverde, Parnaíba - PI, 64241-145</p>
+                    </div>
+                    <div class="col">
+                        <div class="socials">
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/facebook.png') }}" alt="Facebook"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/ig.png') }}" alt="Instagram"></a>
+                            <a href="#"><img src="{{ url_for('static', filename='img/socials/x.webp') }}" alt="X"></a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url_for('termos') }}">Termos de serviço</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        function previewImages(event) {
+            const files = event.target.files;
+            const previewContainer = document.getElementById('image-preview-container');
+
+            // Limpar pré-visualização anterior
+            previewContainer.innerHTML = '';
+
+            // Verifica se o número de arquivos excede 5
+            if (files.length > 5) {
+                alert('Você pode adicionar até 5 imagens.');
+                return;
+            }
+
+            // Iterar sobre os arquivos e mostrar as imagens
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = e.target.result;
+                    imgElement.classList.add('preview-img');
+                    previewContainer.appendChild(imgElement);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+
+</html>
