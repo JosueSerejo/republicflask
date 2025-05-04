@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
+import os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
@@ -16,12 +18,11 @@ def obter_usuario_nome():
             return usuario[0]
     return None
 
-# Torna usuario_nome acessível automaticamente em todos os templates
 @app.context_processor
 def inject_usuario_nome():
     return dict(usuario_nome=obter_usuario_nome())
 
-# Página principal (home)
+# Página inicial
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -31,7 +32,7 @@ def index():
 def sobre():
     return render_template('sobre.html')
 
-# Página de pesquisa de imóveis
+# Página de pesquisa de apartamentos
 @app.route('/pesquisa')
 def pesquisa():
     conn = sqlite3.connect('instance/banco.db')
@@ -49,31 +50,28 @@ def pesquisa():
             'valor': row[3],
             'endereco': row[4],
             'inclusos': row[5].split(',') if row[5] else [],
-            'imagem': row[6]
+            'imagens': row[6].split(',') if row[6] else ['default.jpg']
         }
         apartamentos.append(apt)
 
     return render_template('pesquisa.html', apartamentos=apartamentos)
 
-# Página de apartamentos (acesso restrito)
+# Página de cadastro de apartamento
 @app.route('/apt')
 def apt():
     if 'usuario_id' not in session:
         return redirect(url_for('login'))
     return render_template('apt.html')
 
-# Página de termos
+# Página de termos de uso
 @app.route('/termos')
 def termos():
     return render_template('termos.html')
 
-import os
-from werkzeug.utils import secure_filename
-
+# Cadastro de imóvel
 @app.route('/cadastro_imovel', methods=['GET', 'POST'])
 def cadastro_imovel():
     if request.method == 'POST':
-        # Coleta os dados do imóvel
         endereco = request.form['endereco']
         bairro = request.form['bairro']
         numero = request.form['numero']
@@ -82,69 +80,123 @@ def cadastro_imovel():
         valor = request.form['valor'].replace(",", ".")
         quartos = request.form['quartos']
         banheiros = request.form['banheiros']
-        inclusos = request.form.getlist('inclusos')  # lista
+        inclusos = request.form.getlist('inclusos')
         outros = request.form['outros']
         descricao = request.form['descricao']
 
-        imagens = request.files.getlist('fotos')  # Lista de imagens
-        nomes_imagens = []  # Lista para armazenar os nomes das imagens
+        imagens = request.files.getlist('fotos')
+        nomes_imagens = []
 
         for imagem in imagens:
             if imagem.filename != "":
                 filename = secure_filename(imagem.filename)
-                caminho_imagem = os.path.join('static/img/apts', filename)
-                imagem.save(caminho_imagem)
+                caminho = os.path.join('static/img/apts', filename)
+                imagem.save(caminho)
                 nomes_imagens.append(filename)
 
-        # Se não houver nenhuma imagem, podemos usar uma imagem padrão
         if not nomes_imagens:
             nomes_imagens.append('default.jpg')
 
         conn = sqlite3.connect('instance/banco.db')
         cursor = conn.cursor()
         cursor.execute(""" 
-            INSERT INTO apartamentos (endereco, bairro, numero, cep, complemento, valor, quartos, banheiros, inclusos, outros, descricao, imagem, tipo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (endereco, bairro, numero, cep, complemento, valor, quartos, banheiros, ",".join(inclusos), outros, descricao, ",".join(nomes_imagens), 'apartamento'))
+            INSERT INTO apartamentos (endereco, bairro, numero, cep, complemento, valor, quartos, banheiros, inclusos, outros, descricao, imagem, tipo, usuario_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            endereco, bairro, numero, cep, complemento, valor, quartos, banheiros,
+            ",".join(inclusos), outros, descricao, ",".join(nomes_imagens), 'apartamento', session['usuario_id']
+        ))
+
         conn.commit()
         conn.close()
 
-        return redirect(url_for('pesquisa'))  # Redireciona para a página de pesquisa
-    else:
-        return render_template('cadastro_imovel.html')
+        return redirect(url_for('pesquisa'))
+    return render_template('cadastro_imovel.html')
 
+# Detalhes do apartamento
 @app.route('/detalhes_apartamento/<int:id>')
 def detalhes_apartamento(id):
     conn = sqlite3.connect('instance/banco.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM apartamentos WHERE id = ?", (id,))
-    apartamento = cursor.fetchone()
+    cursor.execute("""
+       SELECT id, endereco, bairro, numero, cep, complemento, valor, quartos, 
+              banheiros, inclusos, outros, descricao, imagem, tipo, usuario_id 
+       FROM apartamentos WHERE id = ?
+    """, (id,))
+    row = cursor.fetchone()
+
+    if row and len(row) >= 15:
+        apt = {
+            'id': row[0],
+            'endereco': row[1],
+            'bairro': row[2],
+            'numero': row[3],
+            'cep': row[4],
+            'complemento': row[5],
+            'valor': row[6],
+            'quartos': row[7],
+            'banheiros': row[8],
+            'inclusos': row[9].split(',') if row[9] else [],
+            'outros': row[10],
+            'descricao': row[11],
+            'imagens': row[12].split(',') if row[12] else ['default.jpg'],
+            'tipo': row[13],
+            'usuario_id': row[14]
+        }
+
+        # Busca nome do usuário dono
+        cursor.execute('SELECT nome FROM usuarios WHERE id = ?', (apt['usuario_id'],))
+        dono = cursor.fetchone()
+        dono_nome = dono[0] if dono else 'Desconhecido'
+
+        conn.close()
+
+        return render_template('apt.html', apartamento=apt, dono_nome=dono_nome, usuario_logado=session.get('usuario_id'))
+    
+    conn.close()
+    return "Apartamento não encontrado", 404
+
+# Parar anúncio (deletar apartamento)
+@app.route('/parar_anuncio/<int:id>', methods=['POST'])
+def parar_anuncio(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT usuario_id FROM apartamentos WHERE id = ?", (id,))
+    apt = cursor.fetchone()
+
+    if not apt or apt[0] != session['usuario_id']:
+        conn.close()
+        return "Acesso negado", 403
+
+    # Apagar o anúncio
+    cursor.execute("DELETE FROM apartamentos WHERE id = ?", (id,))
+    conn.commit()
     conn.close()
 
-    if apartamento:
-        apt = {
-            'id': apartamento[0],
-            'endereco': apartamento[1],
-            'bairro': apartamento[2],
-            'numero': apartamento[3],
-            'cep': apartamento[4],
-            'complemento': apartamento[5],
-            'valor': apartamento[6],
-            'quartos': apartamento[7],
-            'banheiros': apartamento[8],
-            'inclusos': apartamento[9].split(',') if apartamento[9] else [],
-            'outros': apartamento[10],
-            'descricao': apartamento[11],
-            'imagem': apartamento[12],
-            'tipo': apartamento[13]
-        }
-        return render_template('apt.html', apartamento=apt)
-    else:
-        return "Apartamento não encontrado", 404
+    return redirect(url_for('pesquisa'))
 
+# Verificar estrutura da tabela apartamentos (para debug)
+def verificar_estrutura_tabela():
+    # Conectar ao banco de dados
+    conn = sqlite3.connect('instance/banco.db')
+    cursor = conn.cursor()
+    
+    # Verificar a estrutura da tabela 'apartamentos'
+    cursor.execute("PRAGMA table_info(apartamentos);")
+    colunas = cursor.fetchall()
+    
+    # Fechar a conexão
+    conn.close()
+    
+    # Exibir as colunas da tabela 'apartamentos'
+    print("Estrutura da tabela 'apartamentos':")
+    for col in colunas:
+        print(f"Coluna: {col[1]}, Tipo: {col[2]}")
 
-
-# Página de Cadastro
+# Rota de cadastro de usuário
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     mensagem_cadastro = None
@@ -169,7 +221,7 @@ def cadastro():
 
     return render_template('cadastro.html', mensagem_cadastro=mensagem_cadastro, mensagem_login=mensagem_login)
 
-# Página de Login
+# Rota de login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     mensagem_login = None
@@ -186,14 +238,14 @@ def login():
         conn.close()
 
         if usuario:
-            session['usuario_id'] = usuario[0]  # Armazena o ID do usuário na sessão
+            session['usuario_id'] = usuario[0]
             return redirect(url_for('index'))
         else:
             mensagem_login = 'Email ou senha inválidos!'
 
     return render_template('cadastro.html', mensagem_login=mensagem_login, mensagem_cadastro=mensagem_cadastro)
 
-# Logout
+# Rota de logout
 @app.route('/logout')
 def logout():
     session.pop('usuario_id', None)

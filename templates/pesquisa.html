@@ -31,8 +31,6 @@
                 <a href="{{ url_for('cadastro') }}">Login / Cadastro</a>
             {% endif %}
         </nav>
-        
-        
     </header>
 
     <section class="search-bar">
@@ -74,7 +72,12 @@
                 data-extras="{{ apt.inclusos|join(',') }}"
                 data-endereco="{{ apt.endereco }}">
                 
-                <img src="{{ url_for('static', filename='img/apts/' ~ (apt.imagem or 'default.jpg')) }}" alt="Imagem">
+                <div class="imagens-card">
+                    {% set primeira_imagem = apt.imagens[0] if apt.imagens else 'default.jpg' %}
+                    <img src="{{ url_for('static', filename='img/apts/' ~ primeira_imagem) }}" alt="Imagem do imóvel">
+                </div>
+                
+
                 <h3>{{ apt.tipo|capitalize }}</h3>
                 <p>{{ apt.quartos }} quarto{{ 's' if apt.quartos > 1 }}</p>
         
@@ -88,7 +91,6 @@
             {% endfor %}
         </section>        
     </main>
-
 
     <footer class="footer">
         <div class="footer-content">

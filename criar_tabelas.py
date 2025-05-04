@@ -1,37 +1,47 @@
 import sqlite3
 import os
 
-# Garante que o diretório 'instance' existe
-os.makedirs('instance', exist_ok=True)
-
 # Caminho do banco de dados
 caminho_banco = 'instance/banco.db'
 
-# Conecta e cria a tabela
-conn = sqlite3.connect(caminho_banco)
-cursor = conn.cursor()
+def criar_tabela_apartamentos():
+    # Conecta ao banco de dados
+    conn = sqlite3.connect(caminho_banco)
+    cursor = conn.cursor()
 
-# Criação da tabela apartamentos
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS apartamentos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    endereco TEXT,
-    bairro TEXT,
-    numero TEXT,
-    cep TEXT,
-    complemento TEXT,
-    valor REAL,
-    quartos INTEGER,
-    banheiros INTEGER,
-    inclusos TEXT,
-    outros TEXT,
-    descricao TEXT,
-    imagem TEXT,
-    tipo TEXT
-)
-""")
+    # Criação da tabela apartamentos (caso ainda não exista)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS apartamentos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            endereco TEXT,
+            bairro TEXT,
+            numero TEXT,
+            cep TEXT,
+            complemento TEXT,
+            valor REAL,
+            quartos INTEGER,
+            banheiros INTEGER,
+            inclusos TEXT,
+            outros TEXT,
+            descricao TEXT,
+            imagem TEXT,
+            tipo TEXT,
+            usuario_id INTEGER,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        )
+    ''')
 
-conn.commit()
-conn.close()
+    conn.commit()
+    conn.close()
 
-print("Tabela 'apartamentos' criada/verificada com sucesso no banco:", caminho_banco)
+def cadastrar_apartamento(endereco, bairro, numero, cep, complemento, valor, quartos, banheiros, inclusos, outros, descricao, imagem, tipo, usuario_id):
+    conn = sqlite3.connect(caminho_banco)
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        INSERT INTO apartamentos (endereco, bairro, numero, cep, complemento, valor, quartos, banheiros, inclusos, outros, descricao, imagem, tipo, usuario_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', (endereco, bairro, numero, cep, complemento, valor, quartos, banheiros, ','.join(inclusos), outros, descricao, imagem, tipo, usuario_id))
+
+    conn.commit()
+    conn.close()

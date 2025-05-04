@@ -56,6 +56,18 @@
 
     <section class="details">
       <h2>{{ apartamento.tipo }}: {{ apartamento.endereco }}, {{ apartamento.bairro }} - {{ apartamento.numero }}</h2>
+      <!-- Exibe nome do dono -->
+<!-- Exemplo de como pode ficar a parte do nome do anunciante e o botão -->
+<div class="anunciante">
+  <span>Anunciante: {{ dono_nome }}</span>
+  {% if usuario_logado == apartamento.usuario_id %}
+      <form action="{{ url_for('parar_anuncio', id=apartamento.id) }}" method="POST" style="display:inline;">
+          <button type="submit" class="btn btn-danger" style="margin-left: 10px;">Parar Anúncio</button>
+      </form>
+  {% endif %}
+</div>
+
+
       <ul class="info">
         <li>{{ apartamento.quartos }} quartos</li>
         <li>{{ apartamento.banheiros }} banheiros</li>

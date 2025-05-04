@@ -26,8 +26,12 @@
 }
 
 .image-gallery.side-by-side .main-img img {
-    max-width: 600px;
+    width: 600px;
+    height: 400px; /* ou o valor que você preferir */
+    object-fit: cover; /* garante que a imagem preencha o espaço sem distorcer */
+    border-radius: 12px;
 }
+
 
 .thumbs {
     display: flex;
@@ -114,4 +118,12 @@
 
 .price-action button:hover {
     background-color: #555;
+}
+
+.btn-danger {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
 }
