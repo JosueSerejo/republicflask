@@ -10,4 +10,5 @@ cursor.execute('ALTER TABLE apartamentos ADD COLUMN usuario_id INTEGER')
 conn.commit()
 conn.close()
 
+
 print("Coluna 'usuario_id' adicionada com sucesso!")
